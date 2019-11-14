@@ -1,3 +1,5 @@
+This project allows you to test [MobileNet](https://github.com/tensorflow/tfjs-models/tree/master/mobilenet). It has very minimalistic UI, and it is straight forward to use.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
