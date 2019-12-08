@@ -1,15 +1,14 @@
 import React from "react";
 import { Paper } from "@material-ui/core";
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import ClassificationResult from '../Components/ClassificationResult';
-
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import ClassificationResult from "../Components/ClassificationResult";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      position: 'absolute',
-      top: '35%',
-      left: '36%',
+      position: "absolute",
+      top: "35%",
+      left: "36%"
     }
   })
 );
@@ -25,15 +24,12 @@ interface Props {
 
 const ClassificationResults: React.SFC<Props> = ({ results }) => {
   const classes = useStyles();
-  console.log('Results: ' + results.length); 
   return (
     <Paper className={classes.root}>
-        {results && results.map(result => {
-            return <ClassificationResult
-              result={result}
-            />
-        })
-        }
+      {results &&
+        results.map(result => {
+          return <ClassificationResult result={result} />;
+        })}
     </Paper>
   );
 };

@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       padding: theme.spacing(5, 4),
-      marginTop: '4px',
+      marginTop: "4px"
     }
   })
 );
@@ -16,18 +16,14 @@ interface Props {
   result: ClassificationResultType;
 }
 
-const ClassificationResult: React.SFC<Props> = ({
-  result
-}) => {
+const ClassificationResult: React.SFC<Props> = ({ result }) => {
   const classes = useStyles();
   return (
     <Paper className={classes.root}>
       <Typography variant="h5" component="h3">
         {result.className}
       </Typography>
-      <Typography component="p">
-        {result.probability}
-      </Typography>{" "}
+      <Typography component="p">{result.probability}</Typography>{" "}
     </Paper>
   );
 };
