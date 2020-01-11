@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`classification result are shown properly 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+>
+  <div
+    className="MuiPaper-root MuiPaper-elevation1 makeStyles-root-28 MuiPaper-rounded"
+  >
+    <h3
+      className="MuiTypography-root MuiTypography-h5"
+    >
+      test1
+    </h3>
+    <p
+      className="MuiTypography-root MuiTypography-body1"
+    >
+      0.3333
+    </p>
+     
+  </div>
+  <div
+    className="MuiPaper-root MuiPaper-elevation1 makeStyles-root-28 MuiPaper-rounded"
+  >
+    <h3
+      className="MuiTypography-root MuiTypography-h5"
+    >
+      test2
+    </h3>
+    <p
+      className="MuiTypography-root MuiTypography-body1"
+    >
+      0.4444
+    </p>
+     
+  </div>
+  <div
+    className="MuiPaper-root MuiPaper-elevation1 makeStyles-root-28 MuiPaper-rounded"
+  >
+    <h3
+      className="MuiTypography-root MuiTypography-h5"
+    >
+      test3
+    </h3>
+    <p
+      className="MuiTypography-root MuiTypography-body1"
+    >
+      0.5555
+    </p>
+     
+  </div>
+</div>
+`;
