@@ -1,37 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import "./ImageClassification.css";
 import { useDropzone } from "react-dropzone";
 import * as MobileNet from "@tensorflow-models/mobilenet";
 import * as tf from "@tensorflow/tfjs";
 import { Tensor } from "@tensorflow/tfjs";
-import UploadButton from "../Components/UploadButton";
 import LoadingComponent from "../Components/LoadingComponent";
 import ClassificationResults, {
   ClassificationResultType
 } from "./ClassificationReults";
+import AuthService from "../StateMachine";
+import { useService } from "@xstate/react";
+import PrimaryButton from "./PrimaryButton";
+import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
 
 const ImageClassification = React.memo(function() {
-  const [isModelLoaded, setModelLoaded] = useState(false);
   const [classifier, setClassifier] = useState();
   const [classificationResult, setClassificationResult] = useState();
+  const [current, send] = useService(AuthService);
 
-  useEffect(() => {
-    async function modelReady() {
-      setClassifier(
-        await MobileNet.load().then(model => {
-          setModelLoaded(true);
+  const loadModel = useCallback(async () => {
+    setClassifier(
+      await MobileNet.load()
+        .then(model => {
+          send("SUCCESS");
           return model;
         })
-      );
-    }
+        .catch(() => {
+          send("ERROR");
+        })
+    );
+  }, [send]);
 
-    modelReady();
-  }, []);
+  useEffect(() => {
+    loadModel();
+  }, [loadModel]);
 
   function onDrop(acceptedFiles: File[]): void {
-    prepareImage(acceptedFiles[0]);
+    classifyImage(acceptedFiles[0]);
   }
 
-  function prepareImage(inputFile: File) {
+  function classifyImage(inputFile: File) {
     const image = new Image();
     let fr = new FileReader();
 
@@ -47,7 +56,6 @@ const ImageClassification = React.memo(function() {
       classifier
         .classify(tensor)
         .then((result: Array<ClassificationResultType>) => {
-          console.log("AFTER CLASSIFICATION " + result);
           setClassificationResult(result);
         });
     };
@@ -55,19 +63,48 @@ const ImageClassification = React.memo(function() {
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-  return !isModelLoaded ? (
+  function loadModelAgain() {
+    send("RETRY");
+  }
+
+  return current.value === "loadingModel" ? (
     <LoadingComponent />
-  ) : (
-    <React.Fragment>
+  ) : current.value === "modelLoaded" ? (
+    <div className="container">
+      <Typography variant="h3" component="h3" align="center">
+        Image Classification
+      </Typography>
+      <Typography variant="h4" component="h4" align="center">
+        {"This is the simple application to help you test "}
+        <Link
+          href="https://github.com/tensorflow/tfjs-models/tree/master/mobilenet"
+          underline="none"
+          target="_blank"
+        >
+          MobileNet
+        </Link>{" "}
+        {"with your photo."}
+      </Typography>
       <div {...getRootProps()}>
         <input {...getInputProps()} />
-        <UploadButton />
+        <PrimaryButton text={"Upload photo"} />
       </div>
-      <div className="classification-results">
-        {classificationResult ? (
-          <ClassificationResults results={classificationResult} />
-        ) : null}
-      </div>
+      {classificationResult ? (
+        <ClassificationResults results={classificationResult} />
+      ) : null}
+    </div>
+  ) : (
+    <React.Fragment>
+      <Typography
+        variant="h3"
+        component="h3"
+        align="center"
+        gutterBottom={true}
+        color="textPrimary"
+      >
+        There was an error loading model.
+      </Typography>
+      <PrimaryButton text={"Try again"} onClick={loadModelAgain} />
     </React.Fragment>
   );
 });
